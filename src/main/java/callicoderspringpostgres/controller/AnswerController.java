@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class AnswerController {
@@ -20,7 +21,12 @@ public class AnswerController {
     private QuestionRepository questionRepository;
 
     @GetMapping("/questions/{questionId}/answers")
-    public Answer addAnswer(@PathVariable Long questionId, @Valid @RequestBody Answer answer) {
+    public List<Answer> getAnswersByQuestionId(@PathVariable Long questionId) {
+        return answerRepository.findByQuestionId(questionId);
+    }
+
+    @PostMapping("/questions/{questionId}/answers")
+    public Answer addAnswer(@PathVariable Long questionId, @Valid @RequestBody Answer answer){
         return questionRepository.findById(questionId)
                 .map(question -> {
                     answer.setQuestion(question);
